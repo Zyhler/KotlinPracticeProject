@@ -12,5 +12,10 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+
+
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
+
+
 rootProject.name = "KotlinPractice"
 include ':app'
