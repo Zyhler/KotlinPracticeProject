@@ -53,10 +53,11 @@ class FirstFragment : Fragment() {
                 .addOnCompleteListener(requireActivity()) { task ->
                     if (task.isSuccessful) {
                         // Login successful, navigate to the next screen or perform other actions
+
                         findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
                     } else {
                         // If login fails, display a message to the user.
-                        Toast.makeText(requireContext(), "Authentication failed.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Authentication failed, try again", Toast.LENGTH_SHORT).show()
                     }
                 }
         }
@@ -64,8 +65,10 @@ class FirstFragment : Fragment() {
         // Handle other button clicks or UI interactions as needed
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 }

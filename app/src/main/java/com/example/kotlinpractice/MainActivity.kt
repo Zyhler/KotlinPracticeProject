@@ -1,24 +1,27 @@
 package com.example.kotlinpractice
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
 import com.example.kotlinpractice.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    //protected var firebaseAuth: FirebaseAuth? = null
+    protected val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -46,6 +49,11 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> true
+            R.id.LogoutMenuItem -> {
+                // Call the logout method from the utility class
+                logout()
+                return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -54,5 +62,11 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+    protected fun logout() {
+        firebaseAuth.signOut()
+        // Dette er via ID og should be via Viewbinding.
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        navController.navigate(R.id.action_global_firstFragment)
     }
 }

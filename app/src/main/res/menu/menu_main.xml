@@ -7,4 +7,12 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/LogoutMenuItem"
+        android:enabled="true"
+
+        app:showAsAction="never"
+        android:orderInCategory="101"
+        android:title="Logout"
+        android:visible="true" />
 </menu>
