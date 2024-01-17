@@ -11,7 +11,7 @@ data class Friend(
     val birthDayOfMonth: Int,
     val remarks: String?,
     val pictureUrl: String?,
-    val age: Int
+    val age: Int?
 ) : Serializable {
     constructor(
         name: String,
@@ -21,7 +21,7 @@ data class Friend(
         birthDayOfMonth: Int,
         remarks: String?,
         pictureUrl: String?,
-        age: Int
+        age: Int?
     ) : this(-1, name, userId, birthYear, birthMonth, birthDayOfMonth, remarks, pictureUrl, age)
 
     override fun toString(): String {

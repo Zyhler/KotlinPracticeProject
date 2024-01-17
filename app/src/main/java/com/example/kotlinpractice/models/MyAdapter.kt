@@ -8,8 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinpractice.R
 
 class MyAdapter<T>(
-    private val items: List<T>,
-    private val onItemClicked: (position: Int) -> Unit
+    private var items: List<T>,
+    private val onItemClicked: (position: Int) -> Unit,
+    private val onDataUpdated: () -> Unit
 ) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -28,6 +29,12 @@ class MyAdapter<T>(
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.textView.text = items[position].toString()
+    }
+    fun updateData(newItems: List<T>) {
+        items = newItems
+        notifyDataSetChanged()
+        onDataUpdated.invoke()
+
     }
 
     class MyViewHolder(itemView: View, private val onItemClicked: (position: Int) -> Unit) :

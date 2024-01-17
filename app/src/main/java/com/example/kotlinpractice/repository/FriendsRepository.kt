@@ -8,24 +8,22 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.google.firebase.auth.FirebaseAuth
 
 class FriendsRepository {
-    private val baseUrl = "https://birthdaysrest.azurewebsites.net/api/persons/"
-    // the specific (collection) part of the URL is on the individual methods in the interface friendstoreService
-
-    //"http://anbo-restserviceproviderfriends.azurewebsites.net/Service1.svc/"
+    private val baseUrl = "https://birthdaysrest.azurewebsites.net/api/"
     private val friendBirthdayService: FriendsBirthdayService
     val friendsLiveData: MutableLiveData<List<Friend>> = MutableLiveData<List<Friend>>()
     val errorMessageLiveData: MutableLiveData<String> = MutableLiveData()
     val updateMessageLiveData: MutableLiveData<String> = MutableLiveData()
+    val userEmail = FirebaseAuth.getInstance().currentUser?.email
 
     init {
-        //val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
+
         val build: Retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create()) // GSON
             //.addConverterFactory(KotlinJsonAdapterFactory)
-            //.addConverterFactory(MoshiConverterFactory.create(moshi)) // Moshi, added to Gradle dependencies
             .build()
         friendBirthdayService = build.create(FriendsBirthdayService::class.java)
         getFriends()
@@ -35,21 +33,50 @@ class FriendsRepository {
         friendBirthdayService.getAllfriends().enqueue(object : Callback<List<Friend>> {
             override fun onResponse(call: Call<List<Friend>>, response: Response<List<Friend>>) {
                 if (response.isSuccessful) {
-                    //Log.d("APPLE", response.body().toString())
-                    val b: List<Friend>? = response.body()
-                    friendsLiveData.postValue(b!!)
+                    val friends: List<Friend>? = response.body()
+                    val yourFriends: MutableList<Friend> = mutableListOf()
+
+                    if (friends != null) {
+                        for(item in friends){
+                            if(item.userId == userEmail)
+                                yourFriends.add(item)
+                        }
+                    }
+                    friendsLiveData.postValue(yourFriends!!)
                     errorMessageLiveData.postValue("")
                 } else {
                     val message = response.code().toString() + " " + response.message()
                     errorMessageLiveData.postValue(message)
-                    Log.d("APPLE", message)
+                    Log.d("Repository", message)
                 }
             }
 
             override fun onFailure(call: Call<List<Friend>>, t: Throwable) {
                 //friendsLiveData.postValue(null)
                 errorMessageLiveData.postValue(t.message)
-                Log.d("APPLE", t.message!!)
+                Log.d("Repository", t.message!!)
+            }
+        })
+    }
+    fun getFriends2() {
+        friendBirthdayService.getAllfriends().enqueue(object : Callback<List<Friend>> {
+            override fun onResponse(call: Call<List<Friend>>, response: Response<List<Friend>>) {
+                if (response.isSuccessful) {
+                    val friends: List<Friend>? = response.body()
+
+                    friendsLiveData.postValue(friends!!)
+                    errorMessageLiveData.postValue("")
+                } else {
+                    val message = response.code().toString() + " " + response.message()
+                    errorMessageLiveData.postValue(message)
+                    Log.d("Repository", message)
+                }
+            }
+
+            override fun onFailure(call: Call<List<Friend>>, t: Throwable) {
+                //friendsLiveData.postValue(null)
+                errorMessageLiveData.postValue(t.message)
+                Log.d("Repository", t.message!!)
             }
         })
     }
@@ -58,19 +85,19 @@ class FriendsRepository {
         friendBirthdayService.savefriend(friend).enqueue(object : Callback<Friend> {
             override fun onResponse(call: Call<Friend>, response: Response<Friend>) {
                 if (response.isSuccessful) {
-                    Log.d("APPLE", "Added: " + response.body())
+                    Log.d("Repository", "Added: " + response.body())
                     updateMessageLiveData.postValue("Added: " + response.body())
                     getFriends()
                 } else {
                     val message = response.code().toString() + " " + response.message()
                     errorMessageLiveData.postValue(message)
-                    Log.d("APPLE", message)
+                    Log.d("Repository", message)
                 }
             }
 
             override fun onFailure(call: Call<Friend>, t: Throwable) {
                 errorMessageLiveData.postValue(t.message)
-                Log.d("APPLE", t.message!!)
+                Log.d("Repository", t.message!!)
             }
         })
     }
@@ -79,18 +106,18 @@ class FriendsRepository {
         friendBirthdayService.deletefriend(id).enqueue(object : Callback<Friend> {
             override fun onResponse(call: Call<Friend>, response: Response<Friend>) {
                 if (response.isSuccessful) {
-                    Log.d("APPLE", "Updated: " + response.body())
+                    Log.d("Repository", "Updated: " + response.body())
                     updateMessageLiveData.postValue("Deleted: " + response.body())
                 } else {
                     val message = response.code().toString() + " " + response.message()
                     errorMessageLiveData.postValue(message)
-                    Log.d("APPLE", message)
+                    Log.d("Repository", message)
                 }
             }
 
             override fun onFailure(call: Call<Friend>, t: Throwable) {
                 errorMessageLiveData.postValue(t.message)
-                Log.d("APPLE", t.message!!)
+                Log.d("Repository", t.message!!)
             }
         })
     }
@@ -98,19 +125,20 @@ class FriendsRepository {
     fun update(friend: Friend) {
         friendBirthdayService.updatefriend(friend.id, friend).enqueue(object : Callback<Friend> {
             override fun onResponse(call: Call<Friend>, response: Response<Friend>) {
+
                 if (response.isSuccessful) {
-                    Log.d("APPLE", "Updated: " + response.body())
+                    Log.d("Repository", "Updated: " + response.body())
                     updateMessageLiveData.postValue("Updated: " + response.body())
                 } else {
                     val message = response.code().toString() + " " + response.message()
                     errorMessageLiveData.postValue(message)
-                    Log.d("APPLE", message)
+                    Log.d("Repository", message)
                 }
             }
 
             override fun onFailure(call: Call<Friend>, t: Throwable) {
                 errorMessageLiveData.postValue(t.message)
-                Log.d("APPLE", t.message!!)
+                Log.d("Repository", t.message!!)
             }
         })
     }

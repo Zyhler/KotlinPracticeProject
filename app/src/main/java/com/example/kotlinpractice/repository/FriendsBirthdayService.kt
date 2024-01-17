@@ -1,6 +1,7 @@
 package com.example.kotlinpractice.repository
 
 import com.example.kotlinpractice.models.Friend
+import android.util.Log
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -11,15 +12,15 @@ interface FriendsBirthdayService {
     @GET("persons")
     fun getAllfriends(): Call<List<Friend>>
 
-    @GET("friends/{friendId}")
+    @GET("persons/{friendId}")
     fun getfriendById(@Path("friendId") friendId: Int): Call<Friend>
 
-    @POST("friends")
+    @POST("persons")
     fun savefriend(@Body friend: Friend): Call<Friend>
 
-    @DELETE("friends/{id}")
+    @DELETE("persons/{id}")
     fun deletefriend(@Path("id") id: Int): Call<Friend>
 
-    @PUT("friends/{id}")
+    @PUT("persons/{id}")
     fun updatefriend(@Path("id") id: Int, @Body friend: Friend): Call<Friend>
 }

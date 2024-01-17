@@ -3,6 +3,9 @@ package com.example.kotlinpractice.models
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.kotlinpractice.repository.FriendsRepository
+import com.google.firebase.auth.FirebaseAuth
+import android.util.Log
+
 
 class FriendsViewModel : ViewModel() {
     private val repository = FriendsRepository()
@@ -10,17 +13,32 @@ class FriendsViewModel : ViewModel() {
     val errorMessageLiveData: LiveData<String> = repository.errorMessageLiveData
     val updateMessageLiveData: LiveData<String> = repository.updateMessageLiveData
 
+
+
+
+
+
+
+
+    //}
+
     init {
         reload()
+
     }
 
     fun reload() {
         repository.getFriends()
-    }
 
-    operator fun get(index: Int): Friend? {
-        return friendsLiveData.value?.get(index)
     }
+    operator fun get(index: Int): Friend? {
+        val friendsList = friendsLiveData.value
+        return friendsList?.getOrNull(index)
+    }
+    /*operator fun get(index: Int): Friend? {
+        return friendsLiveData.value?.get(index)
+    }*/
+
 
     fun add(friend: Friend) {
          repository.add(friend)
@@ -32,13 +50,14 @@ class FriendsViewModel : ViewModel() {
 
     fun update(friend: Friend) {
         repository.update(friend)
+
     }
 
-    fun sortByTitle() {
+    fun sortByName() {
         repository.sortByName()
     }
 
-    fun sortByTitleDescending() {
+    fun sortByNameDescending() {
         repository.sortByNameDescending()
     }
     fun filterByName(name: String) {

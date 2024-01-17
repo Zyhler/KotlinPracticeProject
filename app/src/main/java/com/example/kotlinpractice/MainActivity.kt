@@ -13,12 +13,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     //protected var firebaseAuth: FirebaseAuth? = null
-    protected val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,10 +33,7 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -63,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+
     protected fun logout() {
         firebaseAuth.signOut()
         // Dette er via ID og should be via Viewbinding.

@@ -18,10 +18,11 @@
         android:orientation="horizontal">
 
         <Spinner
-            android:id="@+id/spinner_books"
+            android:id="@+id/spinner_friends"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:minHeight="48dp" />
 
         <Button
             android:id="@+id/button_show_details"
@@ -41,7 +42,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:entries="@array/sortings" />
+            android:entries="@array/sortings"
+            android:minHeight="48dp" />
         <!-- entries defines in values / strings.xml -->
 
         <Button
@@ -61,7 +63,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:hint="Name" />
+            android:hint="Name"
+            android:minHeight="48dp" />
 
         <Button
             android:id="@+id/button_filter"
@@ -78,6 +81,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:contentDescription="Add Friend"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
@@ -89,14 +101,5 @@
             android:layout_height="wrap_content" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:contentDescription="Add Friend"
-        app:srcCompat="@android:drawable/ic_input_add" />
 
 </LinearLayout>

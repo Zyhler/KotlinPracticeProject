@@ -31,13 +31,14 @@
         android:name="com.example.kotlinpractice.ThirdFragment"
         android:label="Details"
         tools:layout="@layout/fragment_second">
-
         <action
             android:id="@+id/action_ThirdFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
         <argument
             android:name="position"
-            app:argType="integer" />
+             />
+
+
     </fragment>
     <action
         android:id="@+id/action_global_firstFragment"
