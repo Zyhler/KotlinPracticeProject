@@ -3,13 +3,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/card_background">
+
     <!-- NOT android:layout_height="match_parent" -->
 
     <TextView
         android:id="@+id/textview_list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Some text"
-        android:textStyle="bold|normal" />
+        android:text="@string/some_text"
+        android:textStyle="bold|normal"
+        android:padding="16dp"
+        />
+    <!-- Add an ImageView to display the image -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:visibility="gone"
+        android:src="@drawable/card_background"
+    />
+
 </LinearLayout>

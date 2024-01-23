@@ -33,16 +33,16 @@ class FriendsRepository {
         friendBirthdayService.getAllfriends().enqueue(object : Callback<List<Friend>> {
             override fun onResponse(call: Call<List<Friend>>, response: Response<List<Friend>>) {
                 if (response.isSuccessful) {
-                    val friends: List<Friend>? = response.body()
-                    val yourFriends: MutableList<Friend> = mutableListOf()
+                    val peopleList: List<Friend>? = response.body()
+                    val yourFriendsList: MutableList<Friend> = mutableListOf()
 
-                    if (friends != null) {
-                        for(item in friends){
-                            if(item.userId == userEmail)
-                                yourFriends.add(item)
+                    if (peopleList != null) {
+                        for (item in peopleList) {
+                            if (item.userId == userEmail)
+                                yourFriendsList.add(item)
                         }
                     }
-                    friendsLiveData.postValue(yourFriends!!)
+                    friendsLiveData.postValue(yourFriendsList)
                     errorMessageLiveData.postValue("")
                 } else {
                     val message = response.code().toString() + " " + response.message()
@@ -58,7 +58,7 @@ class FriendsRepository {
             }
         })
     }
-    fun getFriends2() {
+    /*fun getFriends() {
         friendBirthdayService.getAllfriends().enqueue(object : Callback<List<Friend>> {
             override fun onResponse(call: Call<List<Friend>>, response: Response<List<Friend>>) {
                 if (response.isSuccessful) {
@@ -79,7 +79,7 @@ class FriendsRepository {
                 Log.d("Repository", t.message!!)
             }
         })
-    }
+    }*/
 
     fun add(friend: Friend) {
         friendBirthdayService.savefriend(friend).enqueue(object : Callback<Friend> {
@@ -150,11 +150,44 @@ class FriendsRepository {
     fun sortByNameDescending() {
         friendsLiveData.value = friendsLiveData.value?.sortedByDescending { it.name }
     }
+
+    fun sortByAge() {
+        friendsLiveData.value = friendsLiveData.value?.sortedBy { it.age }
+    }
+
+    fun sortByAgeDescending() {
+        friendsLiveData.value = friendsLiveData.value?.sortedByDescending { it.age }
+    }
+
+    fun sortByBirthday() {
+        friendsLiveData.value = friendsLiveData.value?.sortedBy { it.birthDayOfMonth }
+        friendsLiveData.value = friendsLiveData.value?.sortedBy { it.birthMonth }
+    }
+
+    fun filterByAge(ageinput: String) {
+        if (ageinput.isEmpty()) {
+            getFriends()
+        } else {
+
+
+            friendsLiveData.value = friendsLiveData.value?.filter { friend ->
+                friend.age.toString().contains(ageinput)
+
+            }
+
+            Log.d("repository", friendsLiveData.value.toString())
+        }
+    }
+
     fun filterByName(name: String) {
         if (name.isBlank()) {
             getFriends()
-        }else {
-            friendsLiveData.value = friendsLiveData.value?.filter { friend -> friend.name.contains(name) }
+        } else {
+            friendsLiveData.value = friendsLiveData.value?.filter { friend ->
+                friend.name.lowercase().contains(name)
+
+
+            }
             // TODO: bug fix: friendsLiveData.value keeps getting smaller for each filter
         }
     }

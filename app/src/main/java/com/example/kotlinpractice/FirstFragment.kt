@@ -21,7 +21,10 @@ class FirstFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
+    private lateinit var passwordSignUpEditText: EditText
     private lateinit var loginButton: Button
+    private lateinit var signUpButton: Button
+
     private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreateView(
@@ -29,6 +32,7 @@ class FirstFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -38,7 +42,12 @@ class FirstFragment : Fragment() {
         // Initialize views from the binding
         emailEditText = binding.editTextTextEmailAddressForLogin
         passwordEditText = binding.editTextTextPasswordForLogin
+        passwordSignUpEditText = binding.editTextTextPasswordForSignup
         loginButton = binding.buttonLogin
+        signUpButton = binding.buttonSignUp
+
+        binding.editTextTextPasswordForSignup.visibility = View.GONE
+
 
         // Initialize Firebase Authentication
         firebaseAuth = FirebaseAuth.getInstance()
@@ -49,22 +58,80 @@ class FirstFragment : Fragment() {
             val password = passwordEditText.text.toString()
 
             // Firebase authentication logic
-            firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(requireActivity()) { task ->
-                    if (task.isSuccessful) {
-                        // Login successful, navigate to the next screen or perform other actions
+            if(!password.isNullOrEmpty() && !email.isNullOrEmpty()) {
 
-                        findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-                    } else {
-                        // If login fails, display a message to the user.
-                        Toast.makeText(requireContext(), "Authentication failed, try again", Toast.LENGTH_SHORT).show()
+                firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(requireActivity()) { task ->
+                        if (task.isSuccessful) {
+                            // Login successful, navigate to the next screen or perform other actions
+
+                            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+                        } else {
+
+                            loginFailed()
+                        }
                     }
+            }
+            else
+            {
+                loginFailed()
+            }
+        }
+        signUpButton.setOnClickListener {
+            val email = emailEditText.text.toString()
+            val password = passwordEditText.text.toString()
+            val passwordSignUp = passwordSignUpEditText.text.toString()
+
+            if(passwordSignUp.isEmpty()) {
+                binding.editTextTextPasswordForSignup.visibility = View.VISIBLE
+                Toast.makeText(
+                    requireContext(),
+                    "Create your login, with a repeated password",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+
+            if(!password.isNullOrEmpty() && !email.isNullOrEmpty() && !passwordSignUp.isNullOrEmpty()) {
+                if (password == passwordSignUp) {
+                    firebaseAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(requireActivity()) { task ->
+                            if (task.isSuccessful) {
+
+                                Toast.makeText(
+                                    requireContext(),
+                                    "You created a login, and are now logged in as $email",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                                findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+                            }
+                            else
+                            {
+
+                            }
+                        }
                 }
+                else
+                {
+                    Toast.makeText(
+                        requireContext(),
+                        "You didnt repeat the password correctly",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
 
-        // Handle other button clicks or UI interactions as needed
-    }
 
+    }
+    fun loginFailed() {
+        Toast.makeText(
+            requireContext(),
+            "Authentication failed, try again",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

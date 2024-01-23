@@ -25,6 +25,22 @@ data class Friend(
     ) : this(-1, name, userId, birthYear, birthMonth, birthDayOfMonth, remarks, pictureUrl, age)
 
     override fun toString(): String {
-        return "$id  $name, $userId, $birthYear, $birthMonth, $birthDayOfMonth, $remarks, $pictureUrl, $age"
+
+        if(remarks.isNullOrEmpty() || pictureUrl.isNullOrEmpty())
+        {
+            return "Name:$name\nBirthday:$birthDayOfMonth/$birthMonth/$birthYear\nage:$age"
+        }
+        else if(remarks.isNullOrEmpty())
+        {
+            return "Name:$name\nBirthday:$birthDayOfMonth/$birthMonth/$birthYear\nage:$age \n $pictureUrl"
+        }
+        else if(pictureUrl.isNullOrEmpty())
+        {
+            return "Name:$name\nBirthday:$birthDayOfMonth/$birthMonth/$birthYear\nage:$age \n $remarks"
+        }
+        else
+        {
+            return "Name:$name\nBirthday:$birthDayOfMonth/$birthMonth/$birthYear\nage:$age\nComments:$remarks\n$pictureUrl"
+        }
     }
 }

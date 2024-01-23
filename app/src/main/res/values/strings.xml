@@ -2,8 +2,9 @@
     <string name="app_name">KotlinPractice</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="first_fragment_label">Login to birthday App </string>
+    <string name="second_fragment_label">Your friends</string>
+    <string name="third_fragment_label">Your friend</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="login">Login</string>
@@ -18,9 +19,21 @@
     <string name="delete">Delete</string>
     <string name="update">Update</string>
     <string name="add_friend">Add friend</string>
+    <string name="filter_your_results">Filter Your Results</string>
+    <string name="comments_on_person">comments on person</string>
+    <string name="some_text">Some text</string>
+    <string name="image_url">Image URL</string>
+    <string name="user_picture">User Picture</string>
+    <string name="reset_filter">Reset Filter</string>
+    <string name="details">Details</string>
+    <string name="name_or_age">Name or Age</string>
+    <string name="sort">Sort</string>
     <array name="sortings">
-        <item>Name ascending</item>
-        <item>Name descending</item>
+        <item>Name: ascending</item>
+        <item>Name: descending</item>
+        <item>Age: young first</item>
+        <item>Age: old first</item>
+        <item>Birthday</item>
 
     </array>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.kotlinpractice
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,6 +12,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.kotlinpractice.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.nostra13.universalimageloader.core.ImageLoader
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
+
 
 
 
@@ -26,9 +30,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setSupportActionBar(binding.toolbar)
-
+        initImageLoader() // FUTURE imageloader
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -62,10 +65,20 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
 
-    protected fun logout() {
+
+
+    }
+    private fun initImageLoader() {
+        val config = ImageLoaderConfiguration.Builder(this)
+            .build()
+        ImageLoader.getInstance().init(config)
+    }
+    internal fun logout() {
         firebaseAuth.signOut()
-        // Dette er via ID og should be via Viewbinding.
+
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         navController.navigate(R.id.action_global_firstFragment)
     }

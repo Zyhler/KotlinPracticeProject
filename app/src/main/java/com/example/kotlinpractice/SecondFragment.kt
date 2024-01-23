@@ -16,13 +16,13 @@ import com.example.kotlinpractice.databinding.FragmentSecondBinding
 import com.example.kotlinpractice.models.FriendsViewModel
 import com.example.kotlinpractice.models.MyAdapter
 import com.example.kotlinpractice.models.Friend
-import com.example.kotlinpractice.SecondFragmentDirections
+import com.example.kotlinpractice.*
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
+
+
 class SecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
@@ -30,19 +30,22 @@ class SecondFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
+    //val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private lateinit var firebaseAuth: FirebaseAuth
     private val friendsViewModel: FriendsViewModel by activityViewModels()
+    var columns = 2
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        /*binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }*/
+        firebaseAuth = FirebaseAuth.getInstance()
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        val currentUser = firebaseAuth.currentUser
+        if (currentUser == null) {
+            (activity as MainActivity).logout()
+        }
         return binding.root
 
     }
@@ -54,47 +57,34 @@ class SecondFragment : Fragment() {
         binding.fab.visibility = View.VISIBLE
         binding.progressbar.visibility = View.GONE
 
-
-        // Set click listener for the FAB
         binding.fab.setOnClickListener {
-            findNavController().navigate(SecondFragmentDirections.actionSecondFragmentToThirdFragment("-1"))
+            findNavController().navigate(SecondFragmentDirections.actionSecondFragmentToThirdFragment(-1))
         }
-        /*val adapter = MyAdapter<Friend>(emptyList()) { position ->
-            val action = SecondFragmentDirections.actionSecondFragmentToThirdFragment(position.toString())
-            findNavController().navigate(action)
-        }*/
+
         val adapter = MyAdapter<Friend>(
             emptyList(),
             { position ->
-                // Your logic for item click, e.g., navigation or other actions
-                val action = SecondFragmentDirections.actionSecondFragmentToThirdFragment(position.toString())
+
+                val action = SecondFragmentDirections.actionSecondFragmentToThirdFragment(position)
                 findNavController().navigate(action)
             },
             { binding.progressbar.visibility = View.GONE }
         )
-        var columns = 2
-        val currentOrientation = this.resources.configuration.orientation
-        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-            columns = 4
-        } else if (currentOrientation == Configuration.ORIENTATION_PORTRAIT) {
-            columns = 2
-        }
+        val currentOrientation = this.resources.configuration
+        onConfigurationChanged(currentOrientation)
         binding.recyclerView.layoutManager = GridLayoutManager(this.context,columns)
         binding.recyclerView.adapter = adapter
 
+
         binding.progressbar.visibility = View.VISIBLE
         friendsViewModel.friendsLiveData.observe(viewLifecycleOwner) { friends ->
+
             //binding.root.visibility = View.GONE
             binding.recyclerView.visibility = if (friends == null) View.GONE else View.VISIBLE
             if (friends != null) {
-                adapter.updateData(friends)
-                /*binding.recyclerView.layoutManager = GridLayoutManager(this.context, columns)
-                  binding.recyclerView.adapter = adapter
 
-                 */
-                for(friend: Friend in friends) {
-                    Log.d("APPLE", friend.toString())
-                }
+                adapter.updateData(friends)
+
             }
         }
 
@@ -110,40 +100,55 @@ class SecondFragment : Fragment() {
             binding.swiperefresh.isRefreshing = false // TODO too early
         }
 
-        friendsViewModel.friendsLiveData.observe(viewLifecycleOwner) { friends ->
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, friends)
-            binding.spinnerFriends.adapter = adapter
 
-        }
 
-        binding.buttonShowDetails.setOnClickListener {
-            val position = binding.spinnerFriends.selectedItemPosition
-            val action =
-                SecondFragmentDirections.actionSecondFragmentToThirdFragment(position.toString())
-            findNavController().navigate(action)
-        }
 
         binding.buttonSort.setOnClickListener {
             when (binding.spinnerSorting.selectedItemPosition) {
                 0 -> friendsViewModel.sortByName()
                 1 -> friendsViewModel.sortByNameDescending()
-               /* 2 -> friendsViewModel.sortByPrice()
-                3 -> friendsViewModel.sortByPriceDescending()*/
+                2 -> friendsViewModel.sortByAge()
+                3 -> friendsViewModel.sortByAgeDescending()
+                4 -> friendsViewModel.sortByBirthday()
             }
         }
 
         binding.buttonFilter.setOnClickListener {
-            val name = binding.edittextFilterName.text.toString().trim()
-            /* if (title.isBlank()) {
-                 binding.edittextFilterTitle.error = "No title"
-                 return@setOnClickListener
-             }*/
-            friendsViewModel.filterByName(name)
+            val input = binding.edittextFilterName.text.toString().trim().lowercase()
+            try{
+                input.toInt()
+                friendsViewModel.filterByAge(input)
+                Log.d("second fragment", "try ran with name.toInt() -> filterByAge")
+
+
+            }
+            catch(e:Exception){
+                friendsViewModel.filterByName(input)
+                Log.d("second fragment", "Catch $e \n filterByName ran")
+
+                }
+
+        }
+        binding.buttonResetFilter.setOnClickListener{
+            friendsViewModel.filterByName("")
+            binding.edittextFilterName.setText("")
         }
         
     }
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+            columns = 4
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            columns = 2
+
+        }
+        binding.recyclerView.layoutManager = GridLayoutManager(this.context,columns)
+        friendsViewModel.reload()
+
+
 
     }
     override fun onDestroyView() {

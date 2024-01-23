@@ -14,14 +14,6 @@ class FriendsViewModel : ViewModel() {
     val updateMessageLiveData: LiveData<String> = repository.updateMessageLiveData
 
 
-
-
-
-
-
-
-    //}
-
     init {
         reload()
 
@@ -60,7 +52,20 @@ class FriendsViewModel : ViewModel() {
     fun sortByNameDescending() {
         repository.sortByNameDescending()
     }
+    fun sortByAge() {
+        repository.sortByAge()
+    }
+    fun sortByAgeDescending() {
+        repository.sortByAgeDescending()
+    }
+    fun sortByBirthday() {
+        repository.sortByBirthday()
+    }
     fun filterByName(name: String) {
         repository.filterByName(name)
+    }
+    fun filterByAge(ageinput: String) {
+        repository.filterByAge(ageinput)
+
     }
 }

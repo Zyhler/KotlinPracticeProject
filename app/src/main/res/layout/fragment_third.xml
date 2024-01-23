@@ -6,51 +6,174 @@
     android:orientation="vertical"
     tools:context=".ThirdFragment">
 
-    <TextView
-        android:id="@+id/textview_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/editText_name"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autofillHints="Name"
-        android:hint="@string/name"
-        android:inputType="text"
-        android:minHeight="48dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editText_Birthday"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autofillHints="Name"
-        android:hint="@string/birthdate"
-        android:inputType="date"
-        android:minHeight="48dp" />
+            <TextView
+                android:id="@+id/textview_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/button_back"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/back" />
+            <EditText
+                android:id="@+id/editText_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="Name"
+                android:hint="@string/name"
+                android:inputType="text"
+                android:minHeight="48dp" />
 
-    <Button
-        android:id="@+id/button_delete"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/delete" />
+            <EditText
+                android:id="@+id/editText_Birthday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="Name"
+                android:hint="@string/birthdate"
+                android:inputType="date"
+                android:minHeight="48dp" />
 
-    <Button
-        android:id="@+id/button_update"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/update" />
-    <Button
-        android:id="@+id/button_addfriend"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/add_friend" />
+            <EditText
+                android:id="@+id/editText_remarks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="Comments on person"
+                android:hint="@string/comments_on_person"
+                android:inputType="text"
+                android:minHeight="48dp" />
+            <EditText
+                android:id="@+id/editText_image_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="Comments on person"
+                android:hint="@string/image_url"
+                android:inputType="textUri"
+                android:minHeight="48dp" />
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:minWidth="50dp"
+                android:contentDescription="@string/user_picture" />
+
+            <Button
+                android:id="@+id/button_add_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_friend" />
+
+            <Button
+                android:id="@+id/button_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/update" />
+
+            <Button
+                android:id="@+id/button_back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/back" />
+
+            <Button
+                android:id="@+id/button_delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/delete" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
+
+    <!--<?xml version="1.0" encoding="utf-8"?>
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context=".ThirdFragment">
+
+
+            <TextView
+                android:id="@+id/textview_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/editText_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="Name"
+                android:hint="@string/name"
+                android:inputType="text"
+                android:minHeight="48dp" />
+
+
+            <EditText
+                android:id="@+id/editText_Birthday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="Name"
+                android:hint="@string/birthdate"
+                android:inputType="date"
+                android:minHeight="48dp" />
+            <EditText
+                android:id="@+id/editText_remarks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="Comments on person"
+                android:hint="@string/comments_on_person"
+                android:inputType="text"
+                android:minHeight="48dp" />
+            <EditText
+                android:id="@+id/editText_image_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="Comments on person"
+                android:hint="@string/image_url"
+                android:inputType="textUri"
+                android:minHeight="48dp" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:minWidth="50dp"
+
+                android:contentDescription="@string/user_picture" />
+
+            <Button
+                android:id="@+id/button_add_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_friend" />
+
+            <Button
+                android:id="@+id/button_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/update" />
+
+            <Button
+                android:id="@+id/button_back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/back" />
+
+            <Button
+                android:id="@+id/button_delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/delete" />
+
+
+        </LinearLayout>
+    </ScrollView> -->
